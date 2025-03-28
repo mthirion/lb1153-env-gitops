@@ -9,9 +9,9 @@ data:
         sonarqube_url: ''
         sonarqube_password: ''
       tasks:
-        - name: Does user1-{{ .Values.app.name }} already exist in sonarqube?
+        - name: Does {{ .Values.lab.username }}-{{ .Values.app.name }} already exist in sonarqube?
           uri:
-            url: "{{ "{{" }} sonarqube_url {{ "}}" }}/api/projects/search?projects=user1-{{ .Values.app.name }}"
+            url: "{{ "{{" }} sonarqube_url {{ "}}" }}/api/projects/search?projects={{ .Values.lab.username }}-{{ .Values.app.name }}"
             user: admin
             password: "{{ "{{" }} sonarqube_password {{ "}}" }}"
             method: GET
@@ -22,13 +22,13 @@ data:
             validate_certs: false
           register: _projects_list
 
-        - name: Create user1-{{ .Values.app.name }} if necessary
+        - name: Create {{ .Values.lab.username }}-{{ .Values.app.name }} if necessary
           when: _projects_list.json.components[0] is not defined
           block:
 
-          - name: Create user1-{{ .Values.app.name }} project
+          - name: Create {{ .Values.lab.username }}-{{ .Values.app.name }} project
             uri:
-              url: "{{ "{{" }} sonarqube_url {{ "}}" }}/api/projects/create?name=user1-{{ .Values.app.name }}&project=user1-{{ .Values.app.name }}"
+              url: "{{ "{{" }} sonarqube_url {{ "}}" }}/api/projects/create?name={{ .Values.lab.username }}-{{ .Values.app.name }}&project={{ .Values.lab.username }}-{{ .Values.app.name }}"
               user: admin
               password: "{{ "{{" }} sonarqube_password {{ "}}" }}"
               method: POST
@@ -39,9 +39,9 @@ data:
               validate_certs: false
             register: result
 
-          - name: Create user1-{{ .Values.app.name }} project token
+          - name: Create {{ .Values.lab.username }}-{{ .Values.app.name }} project token
             uri:
-              url: "{{ "{{" }} sonarqube_url {{ "}}" }}/api/user_tokens/generate?name=user1-{{ .Values.app.name }}_token&type=PROJECT_ANALYSIS_TOKEN&projectKey=user1-{{ .Values.app.name }}"
+              url: "{{ "{{" }} sonarqube_url {{ "}}" }}/api/user_tokens/generate?name={{ .Values.lab.username }}-{{ .Values.app.name }}_token&type=PROJECT_ANALYSIS_TOKEN&projectKey={{ .Values.lab.username }}-{{ .Values.app.name }}"
               user: admin
               password: "{{ "{{" }} sonarqube_password {{ "}}" }}"
               method: POST
@@ -51,7 +51,7 @@ data:
               validate_certs: false
             register: r_uri
 
-          - name: Create sonarqube user1-{{ .Values.app.name }} secret
+          - name: Create sonarqube {{ .Values.lab.username }}-{{ .Values.app.name }} secret
             kubernetes.core.k8s:
               state: present
               definition:
@@ -59,7 +59,7 @@ data:
                 apiVersion: v1
                 metadata:
                   name: {{ .Values.app.name }}-sonarqube-secret
-                  namespace: user1-{{ .Values.app.name }}
+                  namespace: {{ .Values.app.name }}-{{ .Values.lab.username }}
                 stringData:
                   token: '{{ "{{" }} r_uri.json.token {{ "}}" }}'
                 type: Opaque

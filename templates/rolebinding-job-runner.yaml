@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: job-runner
-    namespace: {{ .Values.app.name }}-user1
+    namespace: {{ .Values.app.name }}-{{ .Values.lab.username }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
