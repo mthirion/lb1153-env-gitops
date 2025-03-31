@@ -51,7 +51,7 @@ data:
               validate_certs: false
             register: r_uri
 
-          - name: Create sonarqube {{ .Values.lab.username }}-{{ .Values.app.name }} secret
+          - name: Create sonarqube {{ .Values.app.name }}-sonarqube-secret for {{ .Values.lab.username }}
             kubernetes.core.k8s:
               state: present
               definition:
