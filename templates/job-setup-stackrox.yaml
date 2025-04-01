@@ -32,7 +32,7 @@ spec:
                 key: password
                 name: common-password-secret
           - name: CENTRAL_STACKROX_URL
-            value: https://central-stackrox.{{ .Values.app.cluster }}
+            value: https://central-stackrox{{ .Values.app.cluster }}
 
       restartPolicy: Never
       volumes:
