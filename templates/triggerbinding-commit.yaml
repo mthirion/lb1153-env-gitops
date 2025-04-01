@@ -8,3 +8,5 @@ spec:
       value: $(body.repository.clone_url)
     - name: git-revision
       value: $(body.after)
+    - name: git-committer
+      value: $(body.pusher.email)
