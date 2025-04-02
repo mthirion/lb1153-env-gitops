@@ -1,7 +1,7 @@
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ .Values.app.name }}-jobrunner-edit
+  name: {{ .Values.app.name }}-{{ .Values.lab.username }}-jobrunner-edit
 subjects:
   - kind: ServiceAccount
     name: job-runner
