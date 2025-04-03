@@ -37,7 +37,13 @@ spec:
 
                   if [ "${STATUS_CODE_2}" == "200" ]; then
 
+                    echo 'Remote call complete'
+
                     break
+
+                  else
+
+                    echo Server returned a "${STATUS_CODE_2}" response.  Trying again...
 
                   fi
 
