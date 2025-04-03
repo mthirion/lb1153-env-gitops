@@ -25,17 +25,21 @@ spec:
 
               if [ ! -z "${HOST}" ]; then
 
-                STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://${HOST}/customers)
+                STATUS_CODE_1=$(curl -s -o /dev/null -w "%{http_code}" https://${HOST}/customers)
 
-                if [ "${STATUS_CODE}" == "200" ]; then
+                if [ "${STATUS_CODE_1}" == "200" ]; then
 
                   echo 'Endpoint ready.  Initiating remote call...'
 
                   BASTION_SUBDOMAIN=$(echo {{ .Values.app.cluster }} | sed -r 's/([^.]*.){3}//')
 
-                  curl -kv https://${HOST}/customers/JKHGFTGTYU/bastion.$BASTION_SUBDOMAIN
+                  STATUS_CODE_2=$(curl -s -kv -o /dev/null -w "%{http_code}" https://${HOST}/customers/JKHGFTGTYU/bastion.$BASTION_SUBDOMAIN)
 
-                  break
+                  if [ "${STATUS_CODE_2}" == "200" ]; then
+
+                    break
+
+                  fi
 
                 fi
 
