@@ -33,7 +33,7 @@ spec:
 
                   BASTION_SUBDOMAIN=$(echo {{ .Values.app.cluster }} | sed -r 's/([^.]*.){3}//')
 
-                  curl -kv https://${HOST}/JKHGFTGTYU/bastion.$BASTION_SUBDOMAIN
+                  curl -kv https://${HOST}/customers/JKHGFTGTYU/bastion.$BASTION_SUBDOMAIN
 
                   break
 
